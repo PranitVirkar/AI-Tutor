@@ -7,7 +7,7 @@ import sqlite3
 # =========================
 
 client = OpenAI(
-    api_key="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",
+    api_key="ENter your API key",
     base_url="https://openrouter.ai/api/v1"
 )
 
