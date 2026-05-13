@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>SyntaxSensei | AI Coding Tutor</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="navbar">
+
+        <!-- ================= MENU BUTTON ================= -->
+
+        <div class="menu-btn"
+            id="menuBtn">
+
+            ☰
+
+        </div>
+
+        <div class="logo">
+
+            AI SyntaxSensei
+
+        </div>
+
+        <nav class="nav-links">
+
+            <a id="navHome"
+                class="active">
+
+                Home
+
+            </a>
+
+            <a id="openAboutBtn">
+
+                About Us
+
+            </a>
+
+            <a href="tutor.html">
+
+                AI Tutor
+
+            </a>
+
+            <a id="navChallenges">
+
+                Coding Challenges
+
+            </a>
+
+            <a id="navLeaderboard">
+
+                Leaderboard
+
+            </a>
+
+
+            <!-- ================= PROFILE ================= -->
+
+            <div class="profile-container">
+
+                <div class="profile-icon"
+                    id="profileToggle">
+
+                    <span id="navInitial">U</span>
+
+                </div>
+
+                <div class="profile-card"
+                    id="profileCard">
+
+                    <div class="card-photo-wrapper"
+                        id="cardAvatar">
+
+                        <span id="cardInitial">U</span>
+
+                    </div>
+
+                    <label for="photoInp"
+                        class="upload-label">
+
+                        📷 Change Photo
+
+                    </label>
+
+                    <input type="file"
+                        id="photoInp"
+                        accept="image/*"
+                        style="display:none">
+
+                    <h4 id="profile-name">
+
+                        Full Name
+
+                    </h4>
+
+                    <p id="profile-email">
+
+                        email@example.com
+
+                    </p>
+
+                    <hr class="divider">
+
+                    <button class="logout-btn">
+
+                        Log Out
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+    </header>
+
+
+    <!-- ================= CHAT SIDEBAR ================= -->
+
+    <div class="chat-sidebar"
+        id="chatSidebar">
+
+        <div class="sidebar-header">
+
+            <h3>Recent Chats</h3>
+
+        </div>
+
+        <div id="historyList">
+
+            <div class="history-item">
+
+                No chats yet
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= AI MODAL ================= -->
+
+    <div class="modal-overlay"
+        id="aiModal">
+
+        <div class="modal-content">
+
+            <h3>Ask SyntaxSensei AI</h3>
+
+            <textarea id="aiPrompt"
+                placeholder="Type your coding question here..."></textarea>
+
+            <div class="modal-actions">
+
+                <button class="modal-btn btn-cancel"
+                    id="closeAi">
+
+                    Cancel
+
+                </button>
+
+                <button class="modal-btn btn-submit"
+                    id="submitAi">
+
+                    Get Answer
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= ABOUT MODAL ================= -->
+
+    <div class="modal-overlay"
+        id="aboutModal">
+
+        <div class="modal-content">
+
+            <h3>About SyntaxSensei</h3>
+
+            <p>
+
+                <strong>SyntaxSensei</strong> is an AI-powered coding platform
+                designed to help students solve coding problems,
+                improve logical thinking and learn programming interactively.
+
+            </p>
+
+            <div class="modal-actions">
+
+                <button class="modal-btn btn-submit"
+                    id="closeAbout">
+
+                    Close
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= MAIN CONTAINER ================= -->
+
+    <div class="container">
+
+        <main>
+
+            <!-- ================= HOME VIEW ================= -->
+
+            <div id="home-view">
+
+                <div class="welcome">
+
+                    <h1 id="welcome-text">
+
+                        Welcome back, User 👋
+
+                    </h1>
+
+                    <p>
+
+                        Ask coding questions, solve challenges
+                        and improve your rank.
+
+                    </p>
+
+                </div>
+
+
+                <!-- ================= AI BANNER ================= -->
+
+                <div class="banner">
+
+                    <strong>
+
+                        AI Coding Tutor
+
+                    </strong>
+
+                    <p>
+
+                        Ask any coding question and get
+                        line-by-line explanations instantly.
+
+                    </p>
+
+                    <button id="askAiBtn"
+                        class="banner-btn">
+
+                        Ask AI Tutor
+
+                    </button>
+
+                </div>
+
+
+                <!-- ================= RECOMMENDED ================= -->
+
+                <h2>Recommended Challenges</h2>
+
+                <div class="cards">
+
+                    <div class="card">
+
+                        <div>
+
+                            <h3>1. Reverse String</h3>
+
+                            <p>Flip characters in a string.</p>
+
+                        </div>
+
+                        <button class="start-now-btn-h">
+
+                            Start Now
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div>
+
+                            <h3>2. Palindrome</h3>
+
+                            <p>Check if same backwards.</p>
+
+                        </div>
+
+                        <button class="start-now-btn-h">
+
+                            Start Now
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="card">
+
+                        <div>
+
+                            <h3>3. Binary Search</h3>
+
+                            <p>Master tree logic.</p>
+
+                        </div>
+
+                        <button class="start-now-btn-h">
+
+                            Start Now
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= CHALLENGES VIEW ================= -->
+
+            <div id="challenges-view"
+                class="hidden">
+
+                <h2>All Coding Challenges</h2>
+
+                <div class="vertical-challenges">
+
+                    <div class="v-card">
+
+                        <div>
+
+                            <h3>1. Reverse String</h3>
+
+                            <p>Easy | 10 pts</p>
+
+                        </div>
+
+                        <button class="start-now-btn">
+
+                            Start Now
+
+                        </button>
+
+                    </div>
+
+
+                    <div class="v-card">
+
+                        <div>
+
+                            <h3>2. Palindrome</h3>
+
+                            <p>Easy | 10 pts</p>
+
+                        </div>
+
+                        <button class="start-now-btn">
+
+                            Start Now
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================= RECENT ATTEMPTS ================= -->
+
+            <h2>Recent Coding Attempts</h2>
+
+            <div class="table">
+
+                <div class="row">
+
+                    <span>Two Sum Problem</span>
+
+                    <span>Completed</span>
+
+                </div>
+
+                <div class="row">
+
+                    <span>Sorting Challenge</span>
+
+                    <span>In Progress</span>
+
+                </div>
+
+            </div>
+
+        </main>
+
+
+        <!-- ================= SIDEBAR ================= -->
+
+        <aside>
+
+    <!-- ================= STATS ================= -->
+
+    <div class="stats">
+
+        <!-- ================= POINTS CARD ================= -->
+
+        <div class="stat">
+
+            <h2 id="userPoints">
+
+                0
+
+            </h2>
+
+            <p>
+
+                Points
+
+            </p>
+
+        </div>
+
+
+        <!-- ================= RANK CARD ================= -->
+
+        <div class="stat"
+            style="background:#f59e0b;">
+
+            <h2 id="userRank">
+
+                #0
+
+            </h2>
+
+            <p>
+
+                Rank
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= PERFORMANCE ================= -->
+
+    <div class="leaderboard">
+
+        <h3>
+
+            Performance
+
+        </h3>
+
+        <canvas id="chart"></canvas>
+
+    </div>
+
+</aside>
+
+</div>
+
+
+    <!-- ================= SCRIPT ================= -->
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

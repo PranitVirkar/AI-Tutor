@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyntaxSensei | AI Tutor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-light: #a29bfe;
+            --bg: #f9fafc;
+            --text: #1e293b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --card: #ffffff;
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+
+        body { background: var(--bg); color: var(--text); min-height: 100vh; }
+
+        /* ── NAVBAR ── */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 40px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .logo { color: var(--primary); font-weight: 700; font-size: 20px; }
+        .nav-links { display: flex; align-items: center; gap: 28px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--muted);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .back-btn:hover { opacity: 0.9; }
+
+        /* ── PAGE HEADER ── */
+        .page-header {
+            background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .page-header h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .page-header p { font-size: 15px; opacity: 0.85; }
+
+        /* ── TABS ── */
+        .tabs-wrapper {
+            display: flex;
+            justify-content: center;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            padding: 0 40px;
+            gap: 4px;
+            overflow-x: auto;
+        }
+        .tab-btn {
+            padding: 16px 24px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { color: var(--primary); }
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+        .tab-btn .tab-icon { margin-right: 6px; font-size: 16px; }
+
+        /* ── CONTENT ── */
+        .content { max-width: 800px; margin: 40px auto; padding: 0 20px 60px; }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; }
+
+        /* ── CARDS ── */
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+        .card h3 { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--text); }
+
+        /* ── FORM ELEMENTS ── */
+        .form-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
+        .form-group label { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        input[type="text"], textarea, select {
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            background: white;
+            outline: none;
+            transition: border-color 0.2s;
+            width: 100%;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--primary); }
+        textarea { resize: vertical; min-height: 100px; }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--primary);
+        }
+        .range-label { font-size: 13px; color: var(--primary); font-weight: 600; margin-top: 4px; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            padding: 11px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { opacity: 0.9; }
+        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ── RESULT BOX ── */
+        .result-box {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            margin-top: 16px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text);
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+            display: none;
+        }
+        .result-box.visible { display: block; }
+        .result-box.error { color: var(--danger); border-color: #fecaca; background: #fff5f5; }
+
+        /* ── LOADING SPINNER ── */
+        .spinner {
+            display: inline-block;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-right: 6px;
+            vertical-align: middle;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ── QUIZ SPECIFIC ── */
+        .quiz-question {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+        }
+        .quiz-question p { font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .quiz-option input { accent-color: var(--primary); }
+        .quiz-result-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 12px;
+            background: #ede9fe;
+            color: var(--primary);
+        }
+
+        /* ── HIDDEN ── */
+        .hidden { display: none !important; }
+
+        /* ── LEVEL TOGGLE SECTIONS ── */
+        .level-extras { transition: all 0.2s; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">AI SyntaxSensei</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">About Us</a>
+            <a class="active">AI Tutor</a>
+            <a href="index.html#challenges">Coding Challenges</a>
+            <a href="index.html">Leaderboard</a>
+        </nav>
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+    </header>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+        <h1>AI Tutor</h1>
+        <p>Your personal AI-powered learning assistant — explain, quiz, generate MCQs, write and code</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs-wrapper">
+        <button class="tab-btn active" onclick="switchTab('explain', this)">
+            <span class="tab-icon">📘</span> Explain
+        </button>
+        <button class="tab-btn" onclick="switchTab('mcq', this)">
+            <span class="tab-icon">📝</span> MCQ Generator
+        </button>
+        <button class="tab-btn" onclick="switchTab('quiz', this)">
+            <span class="tab-icon">🎯</span> Practice Quiz
+        </button>
+        <button class="tab-btn" onclick="switchTab('writing', this)">
+            <span class="tab-icon">✍️</span> Writing Assistant
+        </button>
+        <button class="tab-btn" onclick="switchTab('code', this)">
+            <span class="tab-icon">💻</span> Code Helper
+        </button>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+        <!-- ── EXPLAIN TAB ── -->
+        <div class="tab-panel active" id="tab-explain">
+            <div class="card">
+                <h3>📘 Topic Explanation</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2">
+                        <label>Topic</label>
+                        <input type="text" id="exp-topic" placeholder="e.g. Photosynthesis, Recursion, World War 2">
+                    </div>
+                    <div class="form-group">
+                        <label>Student Level</label>
+                        <select id="exp-level" onchange="toggleExtras('exp')">
+                            <option value="High School">High School</option>
+                            <option value="Graduation">Graduation</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row level-extras" id="exp-extras">
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <select id="exp-grade">
+                            <option>5th</option><option>6th</option><option>7th</option>
+                            <option>8th</option><option>9th</option><option>10th</option>
+                            <option>11th</option><option>12th</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Board</label>
+                        <select id="exp-board">
+                            <option>CBSE</option><option>ICSE</option><option>SSC</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="exp-btn" onclick="runExplain()">
+                    Generate Explanation
+                </button>
+                <div class="result-box" id="exp-result"></div>
+            </div>
+        </div>
+
+        <!-- ── MCQ TAB ── -->
+        <div class="tab-panel" id="tab-mcq">
+            <div class="card">
+                <h3>📝 MCQ Generator</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2">
+                        <label>Topic</label>
+                        <input type="text" id="mcq-topic" placeholder="e.g. Newton's Laws, Data Structures">
+                    </div>
+                    <div class="form-group">
+                        <label>Student Level</label>
+                        <select id="mcq-level" onchange="toggleExtras('mcq')">
+                            <option value="High School">High School</option>
+                            <option value="Graduation">Graduation</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row level-extras" id="mcq-extras">
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <select id="mcq-grade">
+                            <option>5th</option><option>6th</option><option>7th</option>
+                            <option>8th</option><option>9th</option><option>10th</option>
+                            <option>11th</option><option>12th</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Board</label>
+                        <select id="mcq-board">
+                            <option>CBSE</option><option>ICSE</option><option>SSC</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:16px">
+                    <label>Number of MCQs: <span id="mcq-count-label">5</span></label>
+                    <input type="range" id="mcq-count" min="5" max="15" value="5"
+                           oninput="document.getElementById('mcq-count-label').textContent = this.value">
+                </div>
+                <button class="btn btn-primary" id="mcq-btn" onclick="runMCQ()">
+                    Generate MCQs
+                </button>
+                <div class="result-box" id="mcq-result"></div>
+            </div>
+        </div>
+
+        <!-- ── QUIZ TAB ── -->
+        <div class="tab-panel" id="tab-quiz">
+            <div class="card">
+                <h3>🎯 Quiz Competition</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <select id="quiz-grade">
+                            <option>5th</option><option>6th</option><option>7th</option>
+                            <option>8th</option><option>9th</option><option>10th</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:2">
+                        <label>Topics (select multiple)</label>
+                        <select id="quiz-topics" multiple style="min-height:90px">
+                            <option value="Science">Science</option>
+                            <option value="Social Studies">Social Studies</option>
+                            <option value="Maths">Maths</option>
+                            <option value="Computer">Computer</option>
+                            <option value="English Grammar">English Grammar</option>
+                        </select>
+                        <span style="font-size:11px;color:var(--muted);margin-top:4px">Hold Ctrl / Cmd to select multiple</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="quiz-gen-btn" onclick="generateQuiz()">
+                    Generate Quiz
+                </button>
+            </div>
+
+            <!-- Questions render here -->
+            <div id="quiz-questions-wrapper" class="hidden">
+                <div id="quiz-questions"></div>
+                <button class="btn btn-primary" onclick="submitQuiz()" style="width:100%;margin-top:8px">
+                    Submit Quiz
+                </button>
+                <div id="quiz-score" class="quiz-result-badge hidden"></div>
+            </div>
+        </div>
+
+        <!-- ── WRITING TAB ── -->
+        <div class="tab-panel" id="tab-writing">
+            <div class="card">
+                <h3>✍️ Writing Assistant</h3>
+                <div class="form-row">
+                    <div class="form-group" style="flex:2">
+                        <label>Topic</label>
+                        <input type="text" id="write-topic" placeholder="e.g. Climate Change, My School, Diwali">
+                    </div>
+                    <div class="form-group">
+                        <label>Writing Type</label>
+                        <select id="write-type">
+                            <option>Essay</option><option>Letter</option>
+                            <option>Paragraph</option><option>Report</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Language</label>
+                        <select id="write-lang">
+                            <option>English</option><option>Hindi</option><option>Marathi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <select id="write-grade">
+                            <option>5th</option><option>6th</option><option>7th</option>
+                            <option>8th</option><option>9th</option><option>10th</option>
+                            <option>11th</option><option>12th</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Board</label>
+                        <select id="write-board">
+                            <option>CBSE</option><option>ICSE</option><option>SSC</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" id="write-btn" onclick="runWriting()">
+                    Generate Writing
+                </button>
+                <div class="result-box" id="write-result"></div>
+            </div>
+        </div>
+
+        <!-- ── CODE TAB ── -->
+        <div class="tab-panel" id="tab-code">
+            <div class="card">
+                <h3>💻 Coding Assistant</h3>
+                <div class="form-group" style="margin-bottom:14px">
+                    <label>Paste Full Problem / Question</label>
+                    <textarea id="code-question" rows="6"
+                        placeholder="Paste the complete problem statement here...&#10;e.g. Given an array of integers, return the two sum indices..."></textarea>
+                </div>
+                <div class="form-group" style="margin-bottom:16px">
+                    <label>Programming Language</label>
+                    <select id="code-lang">
+                        <option>Python</option><option>Java</option>
+                        <option>C++</option><option>JavaScript</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary" id="code-btn" onclick="runCode()">
+                    Generate Solution
+                </button>
+                <div class="result-box" id="code-result"></div>
+            </div>
+        </div>
+
+    </div><!-- end .content -->
+
+    <script>
+        const API = 'http://127.0.0.1:8000';
+
+        // ── AUTH GUARD ──
+        if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+            window.location.href = 'auth.html';
+        }
+
+        // ── TAB SWITCHING ──
+        function switchTab(name, btn) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        // ── SHOW/HIDE GRADE+BOARD based on level ──
+        function toggleExtras(prefix) {
+            const level = document.getElementById(prefix + '-level').value;
+            const extras = document.getElementById(prefix + '-extras');
+            extras.classList.toggle('hidden', level !== 'High School');
+        }
+
+        // ── HELPER: set button loading state ──
+        function setLoading(btnId, loading) {
+            const btn = document.getElementById(btnId);
+            if (loading) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner"></span> Thinking...';
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = btn.dataset.label;
+            }
+        }
+
+        // ── HELPER: show result ──
+        function showResult(boxId, text, isError = false) {
+            const box = document.getElementById(boxId);
+            box.textContent = text;
+            box.className = 'result-box visible' + (isError ? ' error' : '');
+        }
+
+        // Save original button labels on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            ['exp-btn','mcq-btn','write-btn','code-btn','quiz-gen-btn'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.dataset.label = el.innerHTML;
+            });
+        });
+
+        // ── EXPLAIN ──
+        async function runExplain() {
+
+    const topic =
+        document
+        .getElementById('exp-topic')
+        .value
+        .trim();
+
+    const level =
+        document
+        .getElementById('exp-level')
+        .value;
+
+    const grade =
+        document
+        .getElementById('exp-grade')
+        .value;
+
+    const board =
+        document
+        .getElementById('exp-board')
+        .value;
+
+    if (!topic) {
+
+        return alert(
+            'Please enter a topic.'
+        );
+
+    }
+
+    setLoading('exp-btn', true);
+
+    try {
+
+        const response =
+            await fetch(
+
+                `${API}/ask-ai?question=${encodeURIComponent(topic)}&level=${encodeURIComponent(level)}&grade=${encodeURIComponent(grade)}&board=${encodeURIComponent(board)}`
+
+            );
+
+        const data =
+            await response.json();
+
+        console.log(data);
+
+        showResult(
+            'exp-result',
+            data.explanation
+        );
+
+    } catch (e) {
+
+        console.error(e);
+
+        showResult(
+            'exp-result',
+            '⚠️ Backend error',
+            true
+        );
+
+    } finally {
+
+        setLoading(
+            'exp-btn',
+            false
+        );
+
+    }
+
+}
+
+        // ── MCQ ──
+      async function runMCQ() {
+
+    const topic =
+        document
+        .getElementById('mcq-topic')
+        .value
+        .trim();
+
+    const level =
+        document
+        .getElementById('mcq-level')
+        .value;
+
+    const grade =
+        document
+        .getElementById('mcq-grade')
+        .value;
+
+    const board =
+        document
+        .getElementById('mcq-board')
+        .value;
+
+    const numQuestions =
+        document
+        .getElementById('mcq-count')
+        .value;
+
+    if (!topic) {
+
+        return alert(
+            'Please enter a topic.'
+        );
+
+    }
+
+    setLoading(
+        'mcq-btn',
+        true
+    );
+
+    try {
+
+        const response =
+            await fetch(
+
+`${API}/generate-mcq?topic=${encodeURIComponent(topic)}&level=${encodeURIComponent(level)}&grade=${encodeURIComponent(grade)}&board=${encodeURIComponent(board)}&num_questions=${numQuestions}`
+
+            );
+
+        const data =
+            await response.json();
+
+        console.log(data);
+
+        let output = "";
+
+        data.quiz.forEach((q, index) => {
+
+            output +=
+                `${q.question}\n\n`;
+
+            q.options.forEach((opt) => {
+
+                output += `${opt}\n`;
+
+            });
+
+            output +=
+                `\nAnswer: ${q.answer}\n\n`;
+
+        });
+
+        showResult(
+            'mcq-result',
+            output
+        );
+
+    } catch (e) {
+
+        console.error(e);
+
+        showResult(
+            'mcq-result',
+            '⚠️ Backend error',
+            true
+        );
+
+    } finally {
+
+        setLoading(
+            'mcq-btn',
+            false
+        );
+
+    }
+
+}
+
+        // ── QUIZ ──
+        let quizData = [];
+
+
+// ================= GENERATE QUIZ ================= //
+
+async function generateQuiz() {
+
+    const grade =
+        document
+        .getElementById('quiz-grade')
+        .value;
+
+    const topicSelect =
+        document
+        .getElementById('quiz-topics');
+
+    const topics =
+        Array.from(
+            topicSelect.selectedOptions
+        ).map(o => o.value);
+
+    if (topics.length === 0) {
+
+        return alert(
+            'Please select at least one topic.'
+        );
+
+    }
+
+    setLoading(
+        'quiz-gen-btn',
+        true
+    );
+
+    document
+    .getElementById(
+        'quiz-questions-wrapper'
+    )
+    .classList.add('hidden');
+
+    document
+    .getElementById(
+        'quiz-score'
+    )
+    .classList.add('hidden');
+
+    try {
+
+        const topic =
+            topics.join(", ");
+
+        const res =
+            await fetch(
+
+`${API}/practice-quiz?topic=${encodeURIComponent(topic)}&level=High School&grade=${encodeURIComponent(grade)}&board=CBSE&num_questions=10`
+
+            );
+
+        const data =
+            await res.json();
+
+        console.log(data);
+
+        quizData =
+            data.quiz;
+
+        renderQuiz(
+            quizData
+        );
+
+    } catch (e) {
+
+        console.error(e);
+
+        alert(
+            '⚠️ Backend error'
+        );
+
+    } finally {
+
+        setLoading(
+            'quiz-gen-btn',
+            false
+        );
+
+    }
+
+}
+
+// ================= RENDER QUIZ ================= //
+
+function renderQuiz(questions) {
+
+    const container =
+        document.getElementById(
+            'quiz-questions'
+        );
+
+    container.innerHTML = '';
+
+    questions.forEach((q, i) => {
+
+        const div =
+            document.createElement('div');
+
+        div.className =
+            'quiz-question';
+
+        div.innerHTML =
+            `<p>
+                Q${i + 1}.
+                ${q.question.replace(/^Q\d+\.\s*/, '')}
+            </p>` +
+
+            q.options.map(opt => `
+
+                <label class="quiz-option">
+
+                    <input
+                        type="radio"
+                        name="q${i}"
+                        value="${opt}"
+                    >
+
+                    ${opt}
+
+                </label>
+
+            `).join('');
+
+        container.appendChild(div);
+
+    });
+
+    document
+    .getElementById(
+        'quiz-questions-wrapper'
+    )
+    .classList.remove('hidden');
+
+}
+
+
+// ================= SUBMIT QUIZ ================= //
+
+function submitQuiz() {
+
+    let score = 0;
+
+    let allAnswered = true;
+
+    quizData.forEach((q, i) => {
+
+        const selected =
+            document.querySelector(
+                `input[name="q${i}"]:checked`
+            );
+
+        if (!selected) {
+
+            allAnswered = false;
+
+            return;
+
+        }
+
+        const userOption =
+            selected.value
+            .trim()
+            .toLowerCase();
+
+        const correctOption =
+            q.answer
+            .trim()
+            .toLowerCase();
+
+        if (userOption === correctOption) {
+
+            score++;
+
+        }
+
+    });
+
+    if (!allAnswered) {
+
+        return alert(
+            '⚠️ Please answer all questions.'
+        );
+
+    }
+
+    const scoreEl =
+        document.getElementById(
+            'quiz-score'
+        );
+
+    scoreEl.textContent =
+        `✅ Your Score: ${score} / ${quizData.length}`;
+
+    scoreEl.classList.remove(
+        'hidden'
+    );
+
+    scoreEl.style.background =
+        score >= quizData.length * 0.7
+        ? '#d1fae5'
+        : '#ede9fe';
+
+    scoreEl.style.color =
+        score >= quizData.length * 0.7
+        ? '#065f46'
+        : '#6c5ce7';
+
+}
+
+        // ── WRITING ──
+        async function runWriting() {
+
+    const topic =
+        document
+        .getElementById('write-topic')
+        .value
+        .trim();
+
+    if (!topic) {
+
+        return alert(
+            'Please enter a topic.'
+        );
+
+    }
+
+    setLoading(
+        'write-btn',
+        true
+    );
+
+    try {
+
+        const writingType =
+            document
+            .getElementById('write-type')
+            .value;
+
+        const language =
+            document
+            .getElementById('write-lang')
+            .value;
+
+        const grade =
+            document
+            .getElementById('write-grade')
+            .value;
+
+        const board =
+            document
+            .getElementById('write-board')
+            .value;
+
+        const response =
+            await fetch(
+
+`${API}/writing-helper?topic=${encodeURIComponent(topic)}&writing_type=${encodeURIComponent(writingType)}&language=${encodeURIComponent(language)}&grade=${encodeURIComponent(grade)}&board=${encodeURIComponent(board)}`
+
+            );
+
+        const data =
+            await response.json();
+
+        showResult(
+            'write-result',
+            data.response
+        );
+
+    } catch (e) {
+
+        console.error(e);
+
+        showResult(
+            'write-result',
+            '⚠️ Backend error',
+            true
+        );
+
+    } finally {
+
+        setLoading(
+            'write-btn',
+            false
+        );
+
+    }
+
+}
+
+        // ── CODE ──
+        async function runCode() {
+
+    const question =
+        document
+        .getElementById('code-question')
+        .value
+        .trim();
+
+    if (!question) {
+
+        return alert(
+            'Please paste a problem first.'
+        );
+
+    }
+
+    setLoading(
+        'code-btn',
+        true
+    );
+
+    try {
+
+        const language =
+            document
+            .getElementById('code-lang')
+            .value;
+
+        const response =
+            await fetch(
+
+`${API}/code-helper?topic=${encodeURIComponent(question)}&language=${encodeURIComponent(language)}`
+
+            );
+
+        const data =
+            await response.json();
+
+        showResult(
+            'code-result',
+            data.response
+        );
+
+    } catch (e) {
+
+        console.error(e);
+
+        showResult(
+            'code-result',
+            '⚠️ Backend error',
+            true
+        );
+
+    } finally {
+
+        setLoading(
+            'code-btn',
+            false
+        );
+
+    }
+
+}
+
+    </script>
+</body>
+</html>

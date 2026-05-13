@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Leaderboard | SyntaxSensei</title>
+
+    <link rel="stylesheet"
+        href="leaderboard.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="leaderboard-header">
+
+        <h1>
+
+            🏆 Leaderboard
+
+        </h1>
+
+        <button id="backBtn">
+
+            ← Back
+
+        </button>
+
+    </header>
+
+
+    <!-- ================= TOP CARDS ================= -->
+
+    <section class="top-ranks">
+
+        <div class="top-card silver">
+
+            <h2>🥈</h2>
+
+            <p id="rank2Name">
+
+                Loading...
+
+            </p>
+
+            <span id="rank2Score">
+
+                0 pts
+
+            </span>
+
+        </div>
+
+        <div class="top-card gold">
+
+            <h2>🥇</h2>
+
+            <p id="rank1Name">
+
+                Loading...
+
+            </p>
+
+            <span id="rank1Score">
+
+                0 pts
+
+            </span>
+
+        </div>
+
+        <div class="top-card bronze">
+
+            <h2>🥉</h2>
+
+            <p id="rank3Name">
+
+                Loading...
+
+            </p>
+
+            <span id="rank3Score">
+
+                0 pts
+
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- ================= TABLE ================= -->
+
+    <section class="leaderboard-table">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Rank</th>
+
+                    <th>Username</th>
+
+                    <th>Points</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="leaderboardBody">
+
+                <tr>
+
+                    <td colspan="3">
+
+                        Loading leaderboard...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+
+    <!-- ================= SCRIPT ================= -->
+
+    <script src="leaderboard.js"></script>
+
+</body>
+
+</html>
