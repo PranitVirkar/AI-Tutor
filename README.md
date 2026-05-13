@@ -46,10 +46,6 @@ AI-Tutor/
 
 Installation
 
-Clone the repository:
-
-git clone https://github.com/yourusername/AI-Tutor.git
-
 Go to project folder:
 
 cd AI-Tutor
